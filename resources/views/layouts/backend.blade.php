@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -23,7 +22,7 @@
   <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-
+  @stack('css')
   <!-- Main CSS File -->
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
 
@@ -42,13 +41,13 @@
     <i class="header-toggle d-xl-none bi bi-list"></i>
 
     <div class="profile-img">
-      <img src="{{ asset('assets/img/my-profile-img.jpg') }}" alt="" class="img-fluid rounded-circle">
+      <img src="{{ asset("storage/banner_image/" . ($banner->image ?? "")) }}" alt="" class="img-fluid ">
     </div>
 
     <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="assets/img/logo.png" alt=""> -->
-      <h1 class="sitename">{{ auth()->user()->name }}</h1>
+      <h1 class="sitename">{{ $banner->name?? '' }}</h1>
     </a>
 
     <div class="social-links text-center">
@@ -84,7 +83,6 @@
           </ul>
         </li>
         <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
-        <li><a href="{{ route('login') }}"><i class="bi bi-envelope navicon"></i> Login</a></li>
       </ul>
     </nav>
 

@@ -5,45 +5,89 @@ namespace App\Http\Controllers\backend;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
-    function index(){
-        $banner = Banner::get();
-        return view('Backend.banner', compact('banner'));
+    function index()
+    {
+        $banners = Banner::latest()->get();
+        return view('Backend.banner', compact('banners'));
     }
-    function storeandupdate(Request $request , $id= null){
-        if($id){
-            $banner = Banner::find($id);
-            $banner->name = $request->name;
-            $banner->profession = $request->profession;
-            if($request->hasFile('image')){
-                $filename = time().'.'.$request->image->extension();
-                $filePath= $request->image->storeAs('banner', $filename, 'public');
-                $banner->image = $filename;
-            }
-            $banner->save();
-            return redirect()->back()->with('success', 'Banner Updated Successfully');
-        }
-        $this->validate($request,[
+    function store(Request $request)
+    {
+        $this->validate($request, [
             'name' => 'required',
             'profession' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $filename = time().'.'.$request->image->extension();
-        $filePath= $request->image->storeAs('banner', $filename, 'public');        
+        // image section && image validation part 
+        $folder = 'banner_image';
+        if (!Storage::disk('public')->exists($folder)) {
+            Storage::disk('public')->makeDirectory($folder, 0755, true);
+        }
+
+        $imageName = 'banner' . "_" . time() . '.' . $request->image->getClientOriginalExtension(); 
+        $request->image->storeAs($folder, $imageName, 'public');
 
         $banner = new Banner();
         $banner->name = $request->name;
         $banner->profession = $request->profession;
-        $banner->image = $filename;
+        $banner->image = $imageName;
         $banner->save();
         return redirect()->back()->with('success', 'Banner Created Successfully');
+
     }
 
-    // function edit($id){
-    //     $banner = Banner::find($id);
-    //     $banner = Banner::update($banner->);
-    // }
+    function destroy($id)
+    {
+        $banner = Banner::find($id);
+        if ($banner) {
+            $banner->delete();
+            return redirect()->back()->with('success', 'Banner Deleted Successfully');
+        } else {
+            return redirect()->back()->with('error', 'Banner Not Found');
+        }
+    }
+
+    // edit function
+    function edit($id)
+    {
+        $banners = Banner::latest()->get();
+        $editData = Banner::findOrFail($id);
+        return view('Backend.banner', compact('banners', 'editData'));
+    }
+    // update function
+    function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'profession' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $banner = Banner::findOrFail($id);
+        if ($request->hasFile('image')) {
+            if (Storage::disk('public')->exists("banner_image/{$banner->image}")) {
+                Storage::disk('public')->delete("banner_image/{$banner->image}");
+            }
+            // upload new image
+            $folder = 'banner_image';
+            if (!Storage::disk('public')->exists($folder)) {
+                Storage::disk('public')->makeDirectory($folder); 
+            }
+
+            $imageName = 'banner' . "_" . time() . '.' . $request->image->getClientOriginalExtension(); 
+            $request->image->storeAs($folder, $imageName, 'public');
+        } else {
+            $imageName = $banner->image;
+        }
+
+        $banner->name = $request->name;
+        $banner->profession = $request->profession;
+        $banner->image = $imageName;
+        $banner->save();
+        return to_route('banner.index')->with('success', 'Banner Updated Successfully');
+    }
 }

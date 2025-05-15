@@ -18,13 +18,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // dashboard update routes...
 
-Route::middleware('auth')->prefix('dashboard/')->group(
-    function(){
-        Route::prefix('banner/')->controller(BannerController::class)->name('banner.')->group(
-            function (){
-                Route::get('create', 'index')->name('index');
-                Route::post('/storeandupdate/{id?}', 'storeandupdate')->name('storeandupdate');
-            }
-        );
-    }
-);
+Route::middleware('auth')->prefix('dashboard')->group(function () {
+
+    // Redirect dashboard/banner to dashboard/banner/index
+    Route::redirect('banner', 'banner/index');
+
+    Route::prefix('banner')->controller(BannerController::class)->name('banner.')->group(function () {
+        Route::get('index', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::delete('delete/{id}', 'destroy')->name('delete');
+    });
+});
