@@ -8,9 +8,8 @@
             }
         </style>
     @endpush
-
     <div class="container">
-        <div class="row mt-5 ms-3">
+        <div class="row mt-5">
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
@@ -49,7 +48,7 @@
 
                             <div class="my-3">
                                 @if (isset($editData) && $editData->image)
-                                    <img src="{{ asset('storage/banner_image/' . $editData->image) }}" class="mt-2 rounded"
+                                    <img src="{{ asset('storage/banner_image/' . $editData->image) }}" class="mt-2 rounded img-fluid"
                                         width="100" alt="Old Image">
                                 @endif
                             </div>
@@ -92,7 +91,7 @@
                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px" ;>
                                         </td>
                                         <td>
-                                            <div class="button-group">
+                                            <div class="button-group d-flex">
                                                 <a href="{{ route('banner.edit', $banner->id) }}"
                                                     class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('banner.delete', $banner->id) }}" method="POST"

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
+use App\Models\Profile;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('backend.dashboard');
+        $profile = Profile::with('socialLinks')->first();
+        $banners = Banner::get();
+        return view('backend.dashboard', compact("banners", "profile"));
     }
 }

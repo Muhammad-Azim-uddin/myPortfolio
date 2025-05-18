@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - iPortfolio Bootstrap Template</title>
+  <title>@yield('title', 'Dashboard') - Portfolio</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -35,20 +35,18 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-
 <body class="index-page">
-
   <header id="header" class="header dark-background d-flex flex-column">
     <i class="header-toggle d-xl-none bi bi-list"></i>
 
     <div class="profile-img">
-      <img src="assets/img/my-profile-img.jpg" alt="" class="img-fluid rounded-circle">
+      <img src="{{ asset('storage/profile_images/' . $profile->image) }}" alt="" class="img-fluid   ">
     </div>
 
     <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="assets/img/logo.png" alt=""> -->
-      <h1 class="sitename">{{ auth()->user()->name }}</h1>
+      <h1 class="sitename">{{ $profile->name }}</h1>
     </a>
 
     <div class="social-links text-center">
@@ -95,11 +93,11 @@
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
-      <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in" class="">
+      <img src="{{ asset('storage/banner_image/' . $banners[0]->image) }}" alt="" data-aos="fade-in" class="">
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <h2>{{ auth()->user()->name }}</h2>
-        <p>I'm <span class="typed" data-typed-items="Designer, Developer, Freelancer, Photographer">Designer</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+        <h2>{{ $banners[0]->name ?? 'user'}}</h2>
+        <p>I'm <span class="typed" data-typed-items="{{ $banners[0]->profession ?? 'web developer' }}"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
       </div>
 
     </section><!-- /Hero Section -->

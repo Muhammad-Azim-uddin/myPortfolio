@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Models\Banner;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -11,8 +12,9 @@ class BannerController extends Controller
 {
     function index()
     {
+        $profile = Profile::with('socialLinks')->first();
         $banners = Banner::latest()->get();
-        return view('Backend.banner', compact('banners'));
+        return view('Backend.banner', compact('banners', 'profile'));
     }
     function store(Request $request)
     {
@@ -29,9 +31,9 @@ class BannerController extends Controller
         }
 
         $imageName = 'banner' . "_" . time() . '.' . $request->image->getClientOriginalExtension(); 
-        $request->image->storeAs($folder, $imageName, 'public');
+        $image = $request->image->storeAs($folder, $imageName, 'public');
 
-        $banner = new Banner();
+        $banner = new Banner(); 
         $banner->name = $request->name;
         $banner->profession = $request->profession;
         $banner->image = $imageName;
