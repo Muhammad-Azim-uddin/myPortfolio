@@ -58,6 +58,7 @@
     </div>
 
     <nav id="navmenu" class="navmenu">
+      
       <ul>
         <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
         <li><a href="#about"><i class="bi bi-person navicon"></i> About</a></li>

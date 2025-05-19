@@ -42,13 +42,13 @@
     <i class="header-toggle d-xl-none bi bi-list"></i>
 
     <div class="profile-img">
-      <img src="{{ asset("storage/profile_images/" . ($profile->image ?? "")) }}" alt="" class="img-fluid ">
+      <img src="{{ asset("storage/profile_images/" . ($profile[0]->image ?? "")) }}" alt="" class="img-fluid ">
     </div>
 
     <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="assets/img/logo.png" alt=""> -->
-      <h1 class="sitename">{{$profile->name ?? 'null' }}</h1>
+      <h1 class="sitename">{{$profile[0]->name ?? 'null' }}</h1>
     </a>
 
     <div class="social-links text-center">
@@ -58,7 +58,6 @@
       <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
       <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
     </div>
-
     <nav id="navmenu" class="navmenu">
       <ul>
         <li>
